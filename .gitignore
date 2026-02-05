@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Data files
+/data_movies_clean.csv
+/data_movies_clean.csv.xlsx
+
+# Generated outputs
+/spatial_lsh_comparison.csv
