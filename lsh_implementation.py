@@ -163,8 +163,9 @@ def filtered_lsh_top_n(
     num_perm=128,
 ):
     """
-    Two-phase approach: Filter movies by attributes, then find similar ones using LSH.
+    Complete pipeline: Filter movies by attributes, then find similar ones using two-phase LSH.
     
+    Preprocessing: Filter movies by numerical/categorical attributes
     Phase 1 (Indexing): Build LSH index from filtered movie tokens
     Phase 2 (Querying): Query LSH to find similar movies and rank by Jaccard similarity
     
