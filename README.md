@@ -109,7 +109,7 @@ The implementation tracks:
 
 ## Data Format
 
-The code expects a CSV or XLSX file named `data_movies_clean.csv` or `data_movies_clean.csv.xlsx` with the following columns:
+The code expects a CSV or XLSX file named `data_movies_clean.csv` or `data_movies_clean.xlsx` with the following columns:
 - Numerical: `budget`, `revenue`, `runtime`, `popularity`, `vote_average`
 - Textual: `genres`, `production_companies` (or similar)
 - Metadata: `title`, `release_year`, `original_language`, `origin_country`

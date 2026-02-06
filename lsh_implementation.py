@@ -167,6 +167,23 @@ def filtered_lsh_top_n(
     
     Phase 1 (Indexing): Build LSH index from filtered movie tokens
     Phase 2 (Querying): Query LSH to find similar movies and rank by Jaccard similarity
+    
+    Args:
+        text_attribute: Textual column to use for similarity (e.g., "genre_names", "production_company_names")
+        year_range: Tuple of (min_year, max_year) for filtering
+        popularity_range: Tuple of (min_popularity, max_popularity) for filtering
+        vote_average_range: Tuple of (min_vote, max_vote) for filtering
+        runtime_range: Tuple of (min_runtime, max_runtime) for filtering in minutes
+        origin_countries: Tuple of country codes to filter by (e.g., ("US", "GB"))
+        original_language: Language code to filter by (e.g., "en")
+        top_n: Number of most similar movies to return
+        query_title: Optional title of query movie. If None, uses first movie in filtered set
+        threshold: Jaccard similarity threshold for LSH (0.0 to 1.0)
+        num_perm: Number of permutations for MinHash (higher = more accurate but slower)
+        
+    Returns:
+        result: DataFrame with top N similar movies and their attributes
+        query: Title of the query movie
     """
     # Υποψήφιες στήλες που χρειάζονται
     title_candidates = ["title", "original_title", "movie_title"]
