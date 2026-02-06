@@ -1,3 +1,23 @@
+"""
+LSH Implementation for Movie Similarity Search
+
+This module implements a TWO-PHASE APPROACH for finding similar movies:
+
+PHASE 1 (INDEXING):
+    - Build MinHash signatures for each movie based on textual attributes
+    - Insert signatures into LSH (Locality-Sensitive Hashing) data structure
+    - This preprocessing step enables efficient similarity search
+
+PHASE 2 (QUERYING):
+    - Query the pre-built LSH index to find candidate similar items
+    - Compute Jaccard similarity for ranking
+    - Return top-N most similar movies
+
+The separation of indexing and querying phases allows for:
+    - One-time index construction with multiple queries
+    - Efficient similarity search over large datasets
+    - Clear performance benchmarking of each phase
+"""
 from datasketch import MinHash, MinHashLSH
 import time
 import json
@@ -75,7 +95,21 @@ def _contains_any_country(value, allowed_countries):
 
 def build_lsh_index(df, text_col, threshold=0.5, num_perm=128):
     """
-    Build LSH index for a textual attribute column and return timing.
+    PHASE 1: Build LSH index for a textual attribute column and return timing.
+    
+    This is the indexing phase where we create MinHash signatures and insert them
+    into the LSH data structure for efficient similarity search.
+    
+    Args:
+        df: DataFrame with movie data
+        text_col: Column name containing textual tokens
+        threshold: Jaccard similarity threshold for LSH
+        num_perm: Number of permutations for MinHash
+        
+    Returns:
+        lsh: MinHashLSH index structure
+        minhashes: List of MinHash objects for each movie
+        build_time: Time taken to build the index
     """
     start = time.time()
     lsh = MinHashLSH(threshold=threshold, num_perm=num_perm)
@@ -95,7 +129,19 @@ def build_lsh_index(df, text_col, threshold=0.5, num_perm=128):
 
 def query_lsh(lsh, minhashes, query_idx=0):
     """
-    Query LSH index and return timing and results.
+    PHASE 2: Query LSH index and return timing and results.
+    
+    This is the querying phase where we use the pre-built LSH index to find
+    similar items efficiently.
+    
+    Args:
+        lsh: Pre-built MinHashLSH index
+        minhashes: List of MinHash objects
+        query_idx: Index of the query item
+        
+    Returns:
+        result: List of similar item identifiers
+        query_time: Time taken to query
     """
     start = time.time()
     result = lsh.query(minhashes[query_idx])
@@ -117,8 +163,10 @@ def filtered_lsh_top_n(
     num_perm=128,
 ):
     """
-    Φίλτραρε ταινίες με βάση attributes και επέστρεψε τα N πιο όμοια
-    ως προς Production Companies ή Genres (LSH πάνω σε tokens).
+    Two-phase approach: Filter movies by attributes, then find similar ones using LSH.
+    
+    Phase 1 (Indexing): Build LSH index from filtered movie tokens
+    Phase 2 (Querying): Query LSH to find similar movies and rank by Jaccard similarity
     """
     # Υποψήφιες στήλες που χρειάζονται
     title_candidates = ["title", "original_title", "movie_title"]
@@ -198,7 +246,8 @@ def filtered_lsh_top_n(
     else:
         query_idx = 0
 
-    # Build LSH
+    # ========== PHASE 1: INDEXING ==========
+    # Build LSH index from movie tokens
     lsh = MinHashLSH(threshold=threshold, num_perm=num_perm)
     minhashes = []
     for i, tokens in enumerate(tokens_list):
@@ -208,7 +257,8 @@ def filtered_lsh_top_n(
         lsh.insert(f"movie_{i}", m)
         minhashes.append(m)
 
-    # Query
+    # ========== PHASE 2: LSH QUERYING ==========
+    # Query LSH index to find similar movies
     candidates = lsh.query(minhashes[query_idx])
     candidate_indices = [int(c.split("_")[1]) for c in candidates if c != f"movie_{query_idx}"]
     if not candidate_indices:
