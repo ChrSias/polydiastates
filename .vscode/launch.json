@@ -1,0 +1,53 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Two-Phase Example",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/example_two_phase.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: LSH Implementation",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/lsh_implementation.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Final Comparison",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/final_comparison.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Data Preparation",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/data_preparation.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: k-d Tree",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/kd_tree_implementation.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: R-tree",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/rtree_implementation.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
